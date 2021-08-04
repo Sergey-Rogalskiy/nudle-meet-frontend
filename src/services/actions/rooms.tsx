@@ -110,3 +110,20 @@ export const postCreateRoom: AppThunk = (name:any) => (dispatch: AppDispatch) =>
       dispatch(postRoomsFailedAction(err));
   })
 }
+
+
+export const getRoomByID: AppThunk = () => (dispatch: AppDispatch) => {
+  dispatch(getRoomsAction());
+  getRoomsRequest()
+  .then(res => {
+    if (res && res.success) {
+      dispatch(getRoomsSuccessAction(res));
+    } else {
+      dispatch(getRoomsFailedAction('Some error'));
+    }
+  })
+  .catch(err => {
+    console.log(err);
+      dispatch(getRoomsFailedAction(err));
+  })
+}
