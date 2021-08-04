@@ -6,6 +6,7 @@ import {
     WS_SEND_MESSAGE,
     wsGetMessageAction
 } from "./actions/ws-messages"
+import io  from 'socket.io-client'
 
 export const socketMiddleware = () => {
     return store => {
@@ -15,8 +16,13 @@ export const socketMiddleware = () => {
             const { dispatch } = store;
             const { type, payload } = action;
             if (type === WS_CONNECTION_START) {
-                const wsUrl =  'ws://localhost:3001/api/'
-                socket = new WebSocket(wsUrl);
+                // const wsUrl =  'ws://localhost:3001'
+                // socket = new WebSocket(wsUrl);
+                const wsUrl =  'ws://localhost:3001/'
+                socket = io.connect(wsUrl);
+                // socket = socketClient(wsUrl);
+                
+                
             }
             if (socket) {
                 socket.onopen = event => {
