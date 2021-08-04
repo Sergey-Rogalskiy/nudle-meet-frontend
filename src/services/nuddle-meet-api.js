@@ -6,6 +6,10 @@ export const getRoomsRequest = async () => {
   const res = await getResourceRaw(`/rooms`);
   return res;
 };
+export const postRoomsRequest = async (name) => {
+  const res = await postResourceRaw(`/rooms?name=${name}`);
+  return res;
+};
 
 
 const getResourceRaw = async (url) => {
