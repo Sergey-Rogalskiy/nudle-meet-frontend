@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import VideoCall from './simple-peer';
+// import VideoCall from './simple-peer';
 // import io from 'socket.io-client';
 import { getDisplayStream } from './media-access';
 
@@ -20,7 +20,7 @@ const Video = (props) => {
     camState:true,
   };
   const [state, setState] = useState(initialState)
-  const videoCall = new VideoCall();
+  // const videoCall = new VideoCall();
   // const params = useParams()
   let localVideoRef = useRef(null)
   let remoteVideoRef = useRef(null)
@@ -118,38 +118,38 @@ const Video = (props) => {
     });
   }
 
-  const enter = name => {
-    setState({ connecting: true });
-    const peer = videoCall.init(
-      state.localStream,
-      state.initiator
-    );
-    setState({ peer });
+  // const enter = name => {
+  //   setState({ connecting: true });
+  //   const peer = videoCall.init(
+  //     state.localStream,
+  //     state.initiator
+  //   );
+  //   setState({ peer });
 
-    peer.on('signal', data => {
-      const signal = {
-        room: name,
-        desc: data
-      };
-      state.socket.emit('signal', signal);
-    });
-    peer.on('stream', stream => {
-      remoteVideoRef.srcObject = stream;
-      setState({ connecting: false, waiting: false });
-    });
-    peer.on('error', function(err) {
-      console.log(err);
-    });
-  };
+  //   peer.on('signal', data => {
+  //     const signal = {
+  //       room: name,
+  //       desc: data
+  //     };
+  //     state.socket.emit('signal', signal);
+  //   });
+  //   peer.on('stream', stream => {
+  //     remoteVideoRef.srcObject = stream;
+  //     setState({ connecting: false, waiting: false });
+  //   });
+  //   peer.on('error', function(err) {
+  //     console.log(err);
+  //   });
+  // };
 
-  const call = otherId => {
-    videoCall.connect(otherId);
-  };
-  const renderFull = () => {
-    if (state.full) {
-      return 'The room is full';
-    }
-  };
+  // const call = otherId => {
+  //   videoCall.connect(otherId);
+  // };
+  // const renderFull = () => {
+  //   if (state.full) {
+  //     return 'The room is full';
+  //   }
+  // };
   
     return (
       <>

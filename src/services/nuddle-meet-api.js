@@ -1,4 +1,5 @@
-const _apiBase = 'http://localhost:3001/api'
+// const _apiBase = 'http://localhost:3001/api'
+const _apiBase = 'https://pure-shelf-86630.herokuapp.com/api'
 
 export const getRoomsRequest = async () => {
   const res = await getResourceRaw(`/rooms`);

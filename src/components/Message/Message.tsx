@@ -1,6 +1,4 @@
 import React from 'react';
-import { Switch, Route } from 'react-router';
-import { Room, Login } from '../../pages';
 import s from './Message.module.css';
 
 function Message(props: any) {

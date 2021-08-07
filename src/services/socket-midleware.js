@@ -14,7 +14,9 @@ export const socketMiddleware = () => {
             const { dispatch } = store;
             const { type, payload } = action;
             if (type === WS_CONNECTION_START) {
-                const wsUrl =  'ws://localhost:3001/'
+                // const wsUrl =  'ws://localhost:3001/'
+                const wsUrl =  'wss://pure-shelf-86630.herokuapp.com/api'
+                
                 socketio = io.connect(wsUrl);
                 
             }
