@@ -71,7 +71,7 @@ function Room() {
         
         {
           rooms && rooms.map((room: any) => (
-            <p className={s.user}
+            <p key={room.owner} className={s.user}
               onClick={()=>{history.push(`/${room.owner}`)}}>
                 {room.owner}
             </p>
