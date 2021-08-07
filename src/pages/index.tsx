@@ -1,3 +1,7 @@
-import Intro from "./Intro";
+import Room from './Room'
+import Login from './Login'
 
-export {Intro}
+export {
+    Room,
+    Login,
+}

@@ -1,18 +1,24 @@
 import React from 'react';
 import { Switch, Route } from 'react-router';
-import { Intro } from '../../pages';
+import { Room, Login } from '../../pages';
+import { useDispatch } from '../../types';
+import { wsInitAction } from '../../services/actions/rooms';
 import './App.css';
 
 function App() {
+  const dispatch = useDispatch()
+  React.useEffect(()=>{
+    dispatch(wsInitAction())
+  }, [dispatch])
+
   return (
     <>
-      <h1>Header</h1>
       <Switch>
-        <Route path="/2">
-          <p>Second</p>
+        <Route path="/:name">
+          <Room />
         </Route>
         <Route path="/">
-          <Intro />
+          <Login />
         </Route>
       </Switch>
     </>
