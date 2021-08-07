@@ -23,6 +23,7 @@
 
 .chatMainWrapper {
   height: 100%;
+  border-radius: 20px;
   border: solid 1px black;
 }
 .chatBoxWrapper {
@@ -49,6 +50,7 @@
   border-radius: 10px;
   border: none;
   outline: none;
+  border-top: solid 1px black;
 } 
 
 .chatMessageSubmitButton {
@@ -62,7 +64,7 @@
 }
 
 
-.chatDetailsWrapper, .chatBoxWrapper, .chatUsersWrapper {
+.chatMainWrapper, .chatBoxWrapper, .chatUsersWrapper {
   padding: 10px;
   height: 100%;
 }
@@ -94,36 +96,8 @@
   background-color: rgb(161, 110, 110);
 }
 
-.video {
-  background-color: chartreuse;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.controlBar {
-  background-color: rgba(160, 160, 160, 0.377);
-  padding: 10px;
-  border-radius: 300px;
-  margin-bottom: 10px;
-}
-
-.controlBar button {
-  border-radius: 25px;
-  height: 50px;
-  width: 50px;
-  margin: 0 10px;
-  transition: background-color 0.2s linear ;
-}
-
-.controlBar button:hover {
-  background-color: rgb(238, 143, 143);
-}
-
-.exitButton {
-  background-color: red;
+.streamVIdeo {
+  position: relative;
 }
 
 .login {
@@ -151,6 +125,11 @@
   font-size: 2rem;
   border-radius: 20px;
   padding: 10px;
+}
+
+.error {
+  color: red;
+  
 }
 
 .cardInput {

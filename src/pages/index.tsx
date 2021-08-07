@@ -3,5 +3,5 @@ import Login from './Login'
 
 export {
     Room,
-    Login
+    Login,
 }

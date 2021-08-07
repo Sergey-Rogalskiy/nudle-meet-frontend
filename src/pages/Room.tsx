@@ -1,145 +1,133 @@
 import React from 'react';
 import { useSelector, useDispatch } from '../types';
 import { getRooms, getRoomByID } from '../services/actions/rooms';
-import { wsInitAction } from '../services/actions/ws-messages';
 import { useParams, useHistory } from 'react-router';
+import { wsSendMessageAction } from '../services/actions/rooms';
+import { deleteLeave } from '../services/actions/rooms';
+import { useRef } from 'react';
+import VideoCall from '../components/VideoCall';
 
 import s from './Pages.module.css'
 import Message from '../components/Message/Message';
+import { setTimeout } from 'timers';
 
 
 function Room() {
   const dispatch = useDispatch()
-  // const store = useSelector(store => store.rooms.roomsSuccess)
+  const test = useSelector(store => store.rooms.roomByIDSuccess)
+  const user = useSelector(store => store.rooms.user)
+  const rooms = useSelector(store => store.rooms.roomsSuccess)
   const params: any = useParams()
 
-  React.useEffect(()=>{
-    // dispatch(getRooms())
-    dispatch(getRoomByID())
-    dispatch(wsInitAction())
-  }, [dispatch])
+  const messageBoxRef: any = useRef(null)
+  const messageInputRef: any = useRef(null)
 
-  const user_test = {
-    name: params.name
-  }
-  const test = {
-    owner: params.name,
-    created: "2021 August 04",
-    users: [
-      {
-        name: "Sergo"
-      },
-      {
-        name: "Lenka"
-      }
-    ],
-    messages: [
-      {
-        name: "Sergo",
-        text: "Hello, Lenka",
-        date: "Wed Aug 04 2021"
-      },
-      {
-        name: "Lenka",
-        text: "Hi, Sergo",
-        date: "19:04:02"
-      },
-      {
-        name: "Friend",
-        text: "Hi, all",
-        date: "19:04:02"
-      },
-      {
-        name: "Sergo",
-        text: "Today, let's talk about us",
-        date: "19:04:02"
-      },
-      {
-        name: "Friend",
-        text: "What' about us?",
-        date: "19:04:02"
-      },
-      {
-        name: "Lenka",
-        text: "WHAT ABOUT US?",
-        date: "19:04:02"
-      },
-      {
-        name: "Lenka",
-        text: "WHAT ABOUT US?",
-        date: "19:04:02"
-      },
-      {
-        name: "Lenka",
-        text: "WHAT ABOUT US?",
-        date: "19:04:02"
-      },
-      {
-        name: "Lenka",
-        text: "WHAT ABOUT US?",
-        date: "19:04:02"
-      },
-      {
-        name: "Lenka",
-        text: "WHAT ABOUT US?",
-        date: "19:04:02"
-      },
-      {
-        name: "Lenka",
-        text: "WHAT ABOUT US?",
-        date: "19:04:02"
-      },
-    ]
-  }
+  React.useEffect(()=>{
+    dispatch(getRooms())
+    dispatch(getRoomByID(params.name))
+  }, [dispatch, params.name])
+
+  React.useEffect(()=>{
+    messageInputRef && messageInputRef.current.focus()
+    setTimeout(()=>{
+      messageBoxRef && messageBoxRef.current.scrollIntoView()
+    }, 1)
+  })
+  
+
   const history = useHistory()
 
   const leaveRoom = () => {
-    history.push(`/`,{name: user_test.name})
+    dispatch(deleteLeave(params.name))
+    history.push(`/`,{name: params.name})
   }
+
+  const [messageText, setMessageText] = React.useState('')
   
+  const onSubmit = (e:any) => {
+    e.preventDefault()
+    const payload = {room:params.name, user: user, messageText}
+    dispatch(wsSendMessageAction(payload))
+    setMessageText('')
+    
+  }
+  const onChange = (e:any) => {
+    setMessageText(e.target.value)
+  }
+
+  if (!user) {
+    leaveRoom()
+  }
+
   return (
     <div className={s.messenger}>
-      
+    
+
+
     <div className={s.chatUsers}>
       <div className={s.chatUsersWrapper}>
-        {/* <input placeholder="Search" className={s.chatUsersSearch}/> */}
+      <p>Rooms</p>
+      {/* <input placeholder="Search" className={s.chatUsersSearch}/> */}
+        
         {
-          test.users && test.users.map((user) => (
-            <p className={s.user}>{user.name}</p>
+          rooms && rooms.map((room: any) => (
+            <p className={s.user}
+              onClick={()=>{history.push(`/${room.owner}`)}}>
+                {room.owner}
+            </p>
           ))
         }
       </div>
     </div>
+    
+      
+    <div className={s.chatUsers}>
+      <div className={s.chatUsersWrapper}>
+      <p>Users</p>
+        {/* <input placeholder="Search" className={s.chatUsersSearch}/> */}
+        {
+          test.users && test.users.map((user: any) => (
+            <p key={user.name} className={s.user}>{user.name}</p>
+          ))
+        }
+      </div>
+    </div>
+
       <div className={s.chatMain}>
         <div className={s.chatMainWrapper}>
-          <div className={s.video}>
-            <div>Video</div>
-            <div className={s.controlBar}>
-              <button 
-                className={s.exitButton}
-                onClick={leaveRoom}>
-                  Exit
-                </button>
-              <button className={s.toogleMicButton}>Mic</button>
-              <button className={s.toogleVideoButton}>Video</button>
-            </div>
+          <div className={s.streamVIdeo}>
+            
+              <VideoCall leaveRoom={leaveRoom}/>
+            
+
           </div>
         </div>
       </div>
-    
+
       <div className={s.chatBox}>
         <div className={s.chatBoxWrapper}>
           <div className={s.chatBoxTop}>
               {
-                test.messages && test.messages.map((message) => (
-                  <Message message={message} own={(message.name === user_test.name) ? true : false}/>
+                test.messages && test.messages.map((message: any) => (
+                  <Message message={message} own={(message?.user === user) ? true : false}/>
                   ))
               }
+              <div ref={messageBoxRef}></div>
           </div>
-          <div className={s.chatBoxBottom}>
-            <textarea className={s.chatMessageInput} placeholder="Share your thoughts..." />
-            <button className={s.chatMessageSubmitButton}>Share</button>
-          </div>
+          <form className={s.chatBoxBottom}
+            onSubmit={(e) => {onSubmit(e)}}>
+            <textarea 
+              ref={messageInputRef}
+              className={s.chatMessageInput} 
+              placeholder="Share your thoughts..." 
+              value={messageText}
+              name={'messageText'}
+              onChange={(e)=>{onChange(e)}}/>
+            <button 
+              className={s.chatMessageSubmitButton}>
+                Share
+              </button>
+          </form>
         </div>
       </div>
     </div>
